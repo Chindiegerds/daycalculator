@@ -9,7 +9,7 @@ def is_leap(year):
         return False
 
 def days_in_month(year, month):
-    if year < 1500 and month < 0 or month > 12:
+    if year < 1500 or month < 0 or month > 12:
         return None
     if month==1 or month==3 or month==5 or month==7 or month == 8 or month==10 or month==12:
         return 31
@@ -22,15 +22,15 @@ def days_in_month(year, month):
         return 30
 
 def day_number_in_year(year, month, day):
-    if year < 1500 and month < 0 or month > 12:
+    if year < 1500 or month < 0 or month > 12:
         return None
     if month == 1:
         return day
     elif month == 2:
         if is_leap(year):
-            return days_in_month(year, month) + day
+            return days_in_month(year, (month -1)) + day
         else:
-            return days_in_month(year, month) + day
+            return days_in_month(year, (month -1)) + day
     elif month == 3:
         if is_leap(year):
             return 60 + day
@@ -87,18 +87,21 @@ def day_number_in_year(year, month, day):
 active = True
 print("Day calculator")
 while active:
-    day, month, year = int(input("Enter the date or -1 to quit: ")), 0, 0
-    if day != -1:
-        month = int(input("Enter the month: "))
-        year = int(input("Enter the year: "))
-
-    if day == -1:
-        active = False
-        print("Thank you")
-    else:
-        day_number = day_number_in_year(year, month, day)
-        if is_leap(year):
-            print(f"Day {day_number} of 366 in year {year}")
+    try:
+        day, month, year = int(input("Enter the date or -1 to quit: ")), 0, 0
+        if day != -1:
+            month = int(input("Enter the month: "))
+            year = int(input("Enter the year: "))
+    
+        if day == -1:
+            active = False
+            print("Thank you")
         else:
-            print(f"Day {day_number} of 365 in year {year}")
+            day_number = day_number_in_year(year, month, day)
+            if is_leap(year):
+                print(f"Day {day_number} of 366 in year {year}")
+            else:
+                print(f"Day {day_number} of 365 in year {year}")
+    except Exception as e:
+        print("Sorry an Error occured. Try again!")
 
